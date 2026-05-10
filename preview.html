@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PagePoints — Preview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>PagePoints — App Preview</title>
   <style>
     :root {
       --bg:         #0F0F23;
       --surface:    #1A1A3E;
       --surface-alt:#252550;
       --primary:    #6366F1;
-      --primary-dk: #4F46E5;
       --text:       #F8FAFC;
       --muted:      #94A3B8;
       --subtle:     #64748B;
@@ -22,928 +21,852 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      height: auto;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    html, body {
+      width: 100%; height: 100%;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
-      height: auto;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      touch-action: pan-y;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
     }
 
-    /* ── HERO ──────────────────────────────────────────────────────────────── */
-    .hero {
+    /* ── SHELL ── */
+    .shell {
       display: flex;
       flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    /* ── TOP NAV ── */
+    .topnav {
+      display: flex;
       align-items: center;
-      text-align: center;
-      padding: 80px 24px 60px;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, #1e1b5e 0%, var(--bg) 70%);
+      justify-content: space-between;
+      padding: 14px 20px 10px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      background: var(--bg);
+    }
+
+    .app-name {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .app-name span { color: var(--primary); }
+
+    .tab-pills {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 3px;
+    }
+
+    .pill {
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      transition: all .18s;
+      white-space: nowrap;
+    }
+
+    .pill.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* ── PANELS ── */
+    .panels {
+      flex: 1;
+      overflow: hidden;
       position: relative;
     }
 
-    .hero::before {
-      content: '';
+    .panel {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(99,102,241,.08) 0%, transparent 60%),
-                  radial-gradient(circle at 80% 50%, rgba(99,102,241,.06) 0%, transparent 60%);
-      pointer-events: none;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: none;
+      padding: 20px;
+    }
+
+    .panel.active { display: block; }
+
+    /* ══════════════════════════════════════
+       PANEL 1 — OVERVIEW
+    ══════════════════════════════════════ */
+    .overview-hero {
+      text-align: center;
+      padding: 28px 16px 24px;
+      background: radial-gradient(ellipse 100% 80% at 50% 0%, #1e1b5e 0%, transparent 80%);
+      border-radius: 20px;
+      margin-bottom: 16px;
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: rgba(99,102,241,.15);
       border: 1px solid rgba(99,102,241,.3);
       border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .06em;
+      padding: 4px 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
       text-transform: uppercase;
       color: #A5B4FC;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
 
-    .hero h1 {
-      font-size: clamp(42px, 7vw, 80px);
+    .hero-title {
+      font-size: clamp(28px, 8vw, 42px);
       font-weight: 800;
-      letter-spacing: -2px;
-      line-height: 1.05;
-      margin-bottom: 20px;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 12px;
     }
 
-    .hero h1 .accent {
-      background: linear-gradient(135deg, #6366F1, #A78BFA, #818CF8);
+    .hero-title .grad {
+      background: linear-gradient(135deg, #818CF8, #A78BFA);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .hero-sub {
-      font-size: clamp(16px, 2.5vw, 20px);
+      font-size: 14px;
       color: var(--muted);
-      max-width: 520px;
-      margin-bottom: 40px;
+      line-height: 1.55;
+      max-width: 340px;
+      margin: 0 auto;
     }
 
-    .cta-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 15px;
-      padding: 12px 24px;
-      cursor: pointer;
-      text-decoration: none;
-      border: none;
-      transition: opacity .2s, transform .15s;
-    }
-    .btn:hover { opacity: .88; transform: translateY(-1px); }
-
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-outline  {
-      background: transparent;
-      color: var(--text);
-      border: 1.5px solid var(--border);
-    }
-
-    /* ── PHONES ────────────────────────────────────────────────────────────── */
-    .phones-section {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 20px;
-      padding: 60px 24px 80px;
-      position: relative;
-      flex-wrap: wrap;
-    }
-
-    .phone {
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .phone.center { transform: translateY(0); z-index: 3; }
-    .phone.side   { transform: translateY(40px) scale(.9); z-index: 2; opacity: .85; }
-
-    .phone-frame {
-      width: 220px;
-      background: #0a0a1a;
-      border-radius: 36px;
-      padding: 10px;
-      box-shadow:
-        0 0 0 1.5px #334155,
-        0 32px 80px rgba(0,0,0,.7),
-        0 0 60px rgba(99,102,241,.1);
-    }
-
-    .phone-screen {
-      border-radius: 28px;
-      overflow: hidden;
-      background: var(--bg);
-      height: 440px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* status bar */
-    .status-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 18px 4px;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .status-icons { display: flex; gap: 4px; align-items: center; }
-
-    /* screen bodies */
-    .screen-body {
-      flex: 1;
-      padding: 12px 14px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
+    .overview-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .screen-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--subtle);
-      text-align: center;
-      margin-top: 6px;
-    }
-
-    /* ── HOME screen ── */
-    .home-greeting { font-size: 13px; font-weight: 700; color: var(--text); }
-    .home-sub { font-size: 9px; color: var(--muted); margin-top: 1px; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px;
-    }
-
-    .stat-card {
+    .ov-card {
       background: var(--surface);
-      border-radius: 10px;
-      padding: 8px 6px;
-      text-align: center;
       border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 14px;
     }
 
-    .stat-value { font-size: 15px; font-weight: 800; }
-    .stat-key   { font-size: 7px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-
-    .activity-header { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-
-    .activity-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface);
-      border-radius: 8px;
-      padding: 6px 8px;
+    .ov-card .icon {
+      font-size: 22px;
+      margin-bottom: 8px;
     }
 
-    .activity-dot {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
+    .ov-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .ov-card p  { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+    /* ══════════════════════════════════════
+       PANEL 2 — SCREENS
+    ══════════════════════════════════════ */
+    .screens-scroll {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
+      gap: 14px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .screens-scroll::-webkit-scrollbar { display: none; }
+
+    .screen-card {
       flex-shrink: 0;
+      width: 200px;
     }
 
-    .activity-title { font-size: 9px; font-weight: 600; }
-    .activity-sub   { font-size: 7.5px; color: var(--muted); }
-    .activity-pts   { font-size: 9px; font-weight: 700; color: var(--success); margin-left: auto; flex-shrink: 0; }
+    .phone-frame {
+      background: #0a0a1a;
+      border-radius: 32px;
+      padding: 8px;
+      box-shadow: 0 0 0 1.5px #334155, 0 20px 50px rgba(0,0,0,.6);
+    }
 
-    /* bottom tab bar */
+    .phone-screen {
+      border-radius: 26px;
+      overflow: hidden;
+      background: var(--bg);
+      height: 390px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 16px 3px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .screen-body {
+      flex: 1;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: hidden;
+    }
+
     .tab-bar {
       display: flex;
       justify-content: space-around;
-      align-items: center;
-      padding: 8px 0 10px;
+      padding: 7px 0 9px;
       background: var(--surface);
       border-top: 1px solid var(--border);
     }
 
-    .tab-item {
+    .tb-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 2px;
-      opacity: .5;
-      font-size: 7px;
+      font-size: 6.5px;
       color: var(--muted);
+      opacity: .5;
+    }
+    .tb-item.on { opacity: 1; color: var(--primary); }
+    .tb-item span:first-child { font-size: 15px; }
+
+    .screen-label {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
     }
 
-    .tab-item.active { opacity: 1; color: var(--primary); }
-    .tab-icon { font-size: 16px; line-height: 1; }
+    /* home screen widgets */
+    .hw-greeting { font-size: 12px; font-weight: 800; }
+    .hw-sub { font-size: 8px; color: var(--muted); }
 
-    /* ── SEARCH screen ── */
-    .search-bar {
+    .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 4px;
+      text-align: center;
+    }
+    .stat-box .v { font-size: 13px; font-weight: 800; }
+    .stat-box .k { font-size: 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+
+    .act-hdr { font-size: 7.5px; font-weight: 700; color: var(--subtle); text-transform: uppercase; letter-spacing: .06em; }
+
+    .act-item {
       display: flex;
       align-items: center;
       gap: 6px;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 10px;
+      border-radius: 7px;
+      padding: 5px 7px;
     }
+    .act-dot { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+    .act-t { font-size: 8px; font-weight: 600; }
+    .act-s { font-size: 6.5px; color: var(--muted); }
+    .act-p { font-size: 8px; font-weight: 700; color: var(--success); margin-left: auto; flex-shrink: 0; }
 
-    .search-bar span { font-size: 11px; }
-    .search-placeholder { font-size: 9px; color: var(--subtle); }
+    /* search screen */
+    .search-bar {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 9px;
+    }
+    .search-bar span { font-size: 10px; }
+    .search-ph { font-size: 8px; color: var(--subtle); }
 
     .book-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface);
-      border-radius: 8px;
-      padding: 7px 8px;
+      display: flex; align-items: center; gap: 7px;
+      background: var(--surface); border-radius: 7px; padding: 6px 7px;
     }
-
-    .book-cover {
-      width: 30px;
-      height: 42px;
-      border-radius: 4px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-
-    .book-info { flex: 1; min-width: 0; }
-    .book-title  { font-size: 9px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .book-author { font-size: 7.5px; color: var(--muted); }
-    .book-pages  { font-size: 7px; color: var(--subtle); margin-top: 2px; }
-
-    .book-chevron { font-size: 10px; color: var(--subtle); }
-
-    /* ── QUIZ screen ── */
-    .quiz-book-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface);
-      border-radius: 10px;
-      padding: 8px 10px;
-    }
-
-    .quiz-cover {
-      width: 36px; height: 50px;
-      border-radius: 4px;
+    .book-cov {
+      width: 26px; height: 36px; border-radius: 3px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
+      font-size: 12px; flex-shrink: 0;
+    }
+    .book-t { font-size: 8px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .book-a { font-size: 6.5px; color: var(--muted); }
+    .book-pg { font-size: 6px; color: var(--subtle); margin-top: 1px; }
+    .chev { font-size: 9px; color: var(--subtle); margin-left: auto; flex-shrink: 0; }
+
+    /* quiz screen */
+    .quiz-hdr {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--surface); border-radius: 8px; padding: 7px 9px;
+    }
+    .quiz-cov { width: 32px; height: 44px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .quiz-t { font-size: 9px; font-weight: 700; }
+    .quiz-m { font-size: 7px; color: var(--muted); }
+    .diff-pill {
+      display: inline-block; background: rgba(99,102,241,.2); color: #A5B4FC;
+      border-radius: 3px; padding: 1px 5px; font-size: 6.5px; font-weight: 700; margin-top: 2px;
     }
 
-    .quiz-title { font-size: 10px; font-weight: 700; }
-    .quiz-meta  { font-size: 7.5px; color: var(--muted); }
-    .diff-badge {
-      display: inline-block;
-      background: rgba(99,102,241,.2);
-      color: #A5B4FC;
-      border-radius: 4px;
-      padding: 1px 5px;
-      font-size: 7px;
-      font-weight: 700;
-      margin-top: 3px;
+    .prog-wrap { height: 3px; background: var(--surface-alt); border-radius: 4px; overflow: hidden; }
+    .prog-fill { height: 100%; background: var(--primary); border-radius: 4px; }
+    .prog-row { display: flex; justify-content: space-between; }
+    .prog-txt { font-size: 7px; color: var(--muted); }
+
+    .q-text { font-size: 9px; font-weight: 600; line-height: 1.4; }
+
+    .opt {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 7px; padding: 5px 7px;
     }
+    .opt.ok  { border-color: var(--success); background: rgba(16,185,129,.1); }
+    .opt.bad { border-color: var(--error);   background: rgba(239,68,68,.1); }
 
-    .progress-bar-wrap { height: 4px; background: var(--surface-alt); border-radius: 4px; overflow: hidden; margin: 2px 0; }
-    .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 4px; }
-
-    .q-num { font-size: 8px; color: var(--muted); }
-    .q-text { font-size: 9.5px; font-weight: 600; line-height: 1.4; }
-
-    .option {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 6px 8px;
-    }
-
-    .option.selected { border-color: var(--primary); background: rgba(99,102,241,.12); }
-    .option.correct  { border-color: var(--success); background: rgba(16,185,129,.12); }
-    .option.wrong    { border-color: var(--error);   background: rgba(239,68,68,.12); }
-
-    .opt-letter {
-      width: 18px; height: 18px;
-      border-radius: 50%;
+    .opt-l {
+      width: 16px; height: 16px; border-radius: 50%;
       border: 1.5px solid var(--border);
       display: flex; align-items: center; justify-content: center;
-      font-size: 8px; font-weight: 700; flex-shrink: 0;
+      font-size: 7px; font-weight: 700; flex-shrink: 0;
+    }
+    .opt.ok  .opt-l { border-color: var(--success); color: var(--success); }
+    .opt.bad .opt-l { border-color: var(--error);   color: var(--error); }
+    .opt-txt { font-size: 7.5px; }
+
+    .exp-box {
+      background: rgba(16,185,129,.07);
+      border: 1px solid rgba(16,185,129,.2);
+      border-radius: 7px; padding: 6px 8px;
+    }
+    .exp-hdr { font-size: 7px; color: var(--success); font-weight: 700; margin-bottom: 2px; }
+    .exp-txt { font-size: 7px; color: var(--muted); }
+
+    /* profile screen */
+    .prof-head {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 5px; padding: 6px 0 2px;
+    }
+    .avatar {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--surface-alt);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 0 0 3px #FFD700, 0 0 0 6px rgba(255,215,0,.15);
+    }
+    .prof-name { font-size: 12px; font-weight: 800; }
+    .prof-user { font-size: 8px; color: var(--muted); }
+    .rank-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      border-radius: 20px; padding: 3px 10px;
+      font-size: 8px; font-weight: 700;
+      border: 1.5px solid #FFD700; color: #FFD700;
+      background: rgba(255,215,0,.07);
     }
 
-    .option.selected .opt-letter { border-color: var(--primary); color: var(--primary); }
-    .option.correct  .opt-letter { border-color: var(--success); color: var(--success); background: rgba(16,185,129,.2); }
-    .option.wrong    .opt-letter { border-color: var(--error);   color: var(--error);   background: rgba(239,68,68,.2); }
+    .pstats { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .ps {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 7px; padding: 7px 9px;
+    }
+    .ps .v { font-size: 13px; font-weight: 800; }
+    .ps .k { font-size: 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
 
-    .opt-text { font-size: 8.5px; }
-
-    /* ── PROFILE screen ── */
-    .profile-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
+    .swipe-hint {
+      text-align: center;
+      font-size: 11px;
+      color: var(--subtle);
       padding: 8px 0 4px;
     }
 
-    .avatar-ring {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 30px;
-      position: relative;
-    }
+    /* ══════════════════════════════════════
+       PANEL 3 — RANKS
+    ══════════════════════════════════════ */
+    .panel-heading { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .panel-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
 
-    .rank-ring {
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      border: 3px solid;
-    }
+    .ranks-list { display: flex; flex-direction: column; gap: 10px; }
 
-    .profile-name { font-size: 13px; font-weight: 800; }
-    .profile-user { font-size: 9px; color: var(--muted); }
-    .rank-badge {
-      display: inline-flex;
+    .rank-row {
+      display: flex;
       align-items: center;
-      gap: 4px;
-      border-radius: 20px;
-      padding: 3px 10px;
-      font-size: 9px;
-      font-weight: 700;
-      border: 1.5px solid;
-    }
-
-    .profile-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-
-    .pstat {
-      background: var(--surface);
-      border-radius: 8px;
-      padding: 8px 10px;
-      border: 1px solid var(--border);
-    }
-
-    .pstat-val { font-size: 14px; font-weight: 800; }
-    .pstat-key { font-size: 7px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-
-    /* ── RANKS section ────────────────────────────────────────────────────── */
-    .section {
-      padding: 60px 24px;
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 10px;
-    }
-
-    .section h2 {
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 12px;
-    }
-
-    .section-sub {
-      color: var(--muted);
-      font-size: 16px;
-      max-width: 480px;
-      margin-bottom: 48px;
-    }
-
-    /* rank cards */
-    .ranks-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 14px;
-    }
-
-    .rank-card {
       background: var(--surface);
-      border-radius: 16px;
-      padding: 20px 14px 16px;
-      text-align: center;
       border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
       position: relative;
       overflow: hidden;
-      transition: transform .2s, box-shadow .2s;
     }
 
-    .rank-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.4);
-    }
-
-    .rank-card::before {
+    .rank-row::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
     }
 
     .rank-orb {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      border: 3px solid;
-    }
-
-    .rank-name  { font-size: 13px; font-weight: 700; }
-    .rank-range { font-size: 10px; color: var(--muted); margin-top: 4px; }
-
-    /* features */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .feature-card {
-      background: var(--surface);
-      border-radius: 16px;
-      padding: 24px;
-      border: 1px solid var(--border);
-    }
-
-    .feature-icon {
-      width: 44px; height: 44px;
-      border-radius: 12px;
-      background: rgba(99,102,241,.15);
+      width: 44px; height: 44px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      margin-bottom: 14px;
+      font-size: 20px; flex-shrink: 0; border: 2.5px solid;
     }
 
-    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-    .feature-card p  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .rank-info { flex: 1; }
+    .rank-name { font-size: 15px; font-weight: 700; }
+    .rank-range { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .rank-sub { font-size: 11px; color: var(--subtle); margin-top: 3px; }
 
-    /* tech stack */
-    .tech-grid {
+    .rank-badge-sm {
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px;
+      border: 1.5px solid; flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════
+       PANEL 4 — HOW IT WORKS
+    ══════════════════════════════════════ */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+
+    .step {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      gap: 16px;
+      padding: 0 0 28px 0;
+      position: relative;
     }
 
-    .tech-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 13px;
-      font-weight: 500;
+    .step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 40px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
     }
 
-    .tech-dot {
-      width: 8px; height: 8px;
+    .step-num {
+      width: 40px; height: 40px;
       border-radius: 50%;
       background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
     }
 
-    /* divider */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: 0 24px;
+    .step-body { flex: 1; padding-top: 8px; }
+    .step-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .step-desc  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    .step-detail {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-top: 10px;
     }
 
-    /* footer */
-    footer {
-      text-align: center;
-      padding: 40px 24px;
-      color: var(--subtle);
-      font-size: 13px;
-    }
-
-    /* responsive */
-    @media (max-width: 680px) {
-      .phone.side { display: none; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 4px 10px;
+      font-size: 11px; font-weight: 500;
     }
   </style>
 </head>
 <body>
+<div class="shell">
 
-<!-- ── HERO ──────────────────────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero-badge">📚 Reading · Gamified</div>
-  <h1>Turn every book<br>into a <span class="accent">ranked match</span></h1>
-  <p class="hero-sub">
-    PagePoints turns reading into a competitive sport. Take AI-generated
-    quizzes, earn points, climb the ranks — and prove you actually read the book.
-  </p>
-  <div class="cta-row">
-    <a class="btn btn-primary" href="#">
-      <span>📖</span> Get Started
-    </a>
-    <a class="btn btn-outline" href="#">
-      <span>▶</span> See How It Works
-    </a>
-  </div>
-</section>
+  <!-- ── TOP NAV ── -->
+  <nav class="topnav">
+    <div class="app-name">Page<span>Points</span></div>
+    <div class="tab-pills">
+      <button class="pill active" onclick="show(0)">Overview</button>
+      <button class="pill"        onclick="show(1)">Screens</button>
+      <button class="pill"        onclick="show(2)">Ranks</button>
+      <button class="pill"        onclick="show(3)">How It Works</button>
+    </div>
+  </nav>
 
-<!-- ── PHONE MOCKUPS ──────────────────────────────────────────────────────── -->
-<div class="phones-section">
+  <div class="panels">
 
-  <!-- Left phone: Book Search -->
-  <div class="phone side">
-    <div class="phone-frame">
-      <div class="phone-screen">
-        <div class="status-bar">
-          <span>9:41</span>
-          <div class="status-icons">
-            <span>●●●</span>
-            <span>WiFi</span>
-            <span>🔋</span>
-          </div>
+    <!-- ══ PANEL 0: OVERVIEW ══ -->
+    <div class="panel active" id="p0">
+      <div class="overview-hero">
+        <div class="hero-badge">📚 Reading · Gamified</div>
+        <h1 class="hero-title">Turn every book<br>into a <span class="grad">ranked match</span></h1>
+        <p class="hero-sub">Take AI-generated quizzes, earn Elo points, and climb 7 competitive tiers — all the way to Grand Sage.</p>
+      </div>
+      <div class="overview-cards">
+        <div class="ov-card">
+          <div class="icon">🤖</div>
+          <h3>AI Quizzes</h3>
+          <p>Claude AI generates unique questions for any book. Easy, Medium, Hard.</p>
         </div>
-        <div class="screen-body">
-          <div style="font-size:14px;font-weight:800;">Find a Book</div>
-          <div class="search-bar">
-            <span>🔍</span>
-            <span class="search-placeholder">Search by title or author…</span>
-          </div>
-          <div class="book-row">
-            <div class="book-cover" style="background:#1e3a5f;">📘</div>
-            <div class="book-info">
-              <div class="book-title">Dune</div>
-              <div class="book-author">Frank Herbert</div>
-              <div class="book-pages">688 pages</div>
-            </div>
-            <div class="book-chevron">›</div>
-          </div>
-          <div class="book-row">
-            <div class="book-cover" style="background:#2d1a4a;">🟣</div>
-            <div class="book-info">
-              <div class="book-title">The Name of the Wind</div>
-              <div class="book-author">Patrick Rothfuss</div>
-              <div class="book-pages">662 pages</div>
-            </div>
-            <div class="book-chevron">›</div>
-          </div>
-          <div class="book-row">
-            <div class="book-cover" style="background:#1a3a2a;">📗</div>
-            <div class="book-info">
-              <div class="book-title">Project Hail Mary</div>
-              <div class="book-author">Andy Weir</div>
-              <div class="book-pages">476 pages</div>
-            </div>
-            <div class="book-chevron">›</div>
-          </div>
-          <div class="book-row">
-            <div class="book-cover" style="background:#3a1a1a;">📕</div>
-            <div class="book-info">
-              <div class="book-title">1984</div>
-              <div class="book-author">George Orwell</div>
-              <div class="book-pages">328 pages</div>
-            </div>
-            <div class="book-chevron">›</div>
-          </div>
-          <div class="book-row" style="opacity:.6;">
-            <div class="book-cover" style="background:#2a2a1a;">📙</div>
-            <div class="book-info">
-              <div class="book-title">The Hobbit</div>
-              <div class="book-author">J.R.R. Tolkien</div>
-              <div class="book-pages">310 pages</div>
-            </div>
-            <div class="book-chevron">›</div>
-          </div>
+        <div class="ov-card">
+          <div class="icon">⚔️</div>
+          <h3>Elo Ranking</h3>
+          <p>A true competitive ladder with 7 tiers and 4 subdivisions each.</p>
         </div>
-        <div class="tab-bar">
-          <div class="tab-item"><span class="tab-icon">🏠</span><span>Home</span></div>
-          <div class="tab-item active"><span class="tab-icon">🔍</span><span>Search</span></div>
-          <div class="tab-item"><span class="tab-icon">👤</span><span>Profile</span></div>
+        <div class="ov-card">
+          <div class="icon">🔥</div>
+          <h3>Daily Streaks</h3>
+          <p>Build streaks for score multipliers. Miss a day, lose it.</p>
+        </div>
+        <div class="ov-card">
+          <div class="icon">🌍</div>
+          <h3>Google Books</h3>
+          <p>Search millions of titles. Covers, metadata, and reading level auto-filled.</p>
+        </div>
+        <div class="ov-card">
+          <div class="icon">📊</div>
+          <h3>Stats</h3>
+          <p>Track points, accuracy, level, rank, peak rank, and reading history.</p>
+        </div>
+        <div class="ov-card">
+          <div class="icon">🎨</div>
+          <h3>Themes</h3>
+          <p>Unlock Fantasy, Sci-Fi, Romance. Grand Sage unlocks the exclusive theme.</p>
         </div>
       </div>
     </div>
-    <div class="screen-label">Book Search</div>
-  </div>
 
-  <!-- Center phone: Home -->
-  <div class="phone center">
-    <div class="phone-frame">
-      <div class="phone-screen">
-        <div class="status-bar">
-          <span>9:41</span>
-          <div class="status-icons">
-            <span>●●●</span>
-            <span>WiFi</span>
-            <span>🔋</span>
-          </div>
-        </div>
-        <div class="screen-body">
-          <div>
-            <div class="home-greeting">Hello, Alex 👋</div>
-            <div class="home-sub">Keep the streak going!</div>
-          </div>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-value" style="color:#6366F1;">2,840</div>
-              <div class="stat-key">Points</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" style="color:#FFD700;">Lv 14</div>
-              <div class="stat-key">Level</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">🔥 7</div>
-              <div class="stat-key">Streak</div>
-            </div>
-          </div>
-          <div>
-            <div class="activity-header" style="margin-bottom:6px;">Recent Activity</div>
-            <div style="display:flex;flex-direction:column;gap:5px;">
-              <div class="activity-item">
-                <div class="activity-dot" style="background:rgba(16,185,129,.15);">📗</div>
-                <div>
-                  <div class="activity-title">Project Hail Mary</div>
-                  <div class="activity-sub">Hard · 92% — 2h ago</div>
+    <!-- ══ PANEL 1: SCREENS ══ -->
+    <div class="panel" id="p1">
+      <div class="swipe-hint">← Swipe to see all screens →</div>
+      <div class="screens-scroll">
+
+        <!-- Home -->
+        <div class="screen-card">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="status-bar"><span>9:41</span><span>🔋</span></div>
+              <div class="screen-body">
+                <div><div class="hw-greeting">Hello, Alex 👋</div><div class="hw-sub">Keep the streak going!</div></div>
+                <div class="stats-row">
+                  <div class="stat-box"><div class="v" style="color:#6366F1;">2,840</div><div class="k">Points</div></div>
+                  <div class="stat-box"><div class="v" style="color:#FFD700;">Lv 14</div><div class="k">Level</div></div>
+                  <div class="stat-box"><div class="v">🔥 7</div><div class="k">Streak</div></div>
                 </div>
-                <div class="activity-pts">+148 pts</div>
+                <div class="act-hdr">Recent Activity</div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                  <div class="act-item">
+                    <div class="act-dot" style="background:rgba(16,185,129,.15);">📗</div>
+                    <div><div class="act-t">Project Hail Mary</div><div class="act-s">Hard · 92%</div></div>
+                    <div class="act-p">+148 pts</div>
+                  </div>
+                  <div class="act-item">
+                    <div class="act-dot" style="background:rgba(99,102,241,.15);">📘</div>
+                    <div><div class="act-t">Dune</div><div class="act-s">Medium · 78%</div></div>
+                    <div class="act-p">+96 pts</div>
+                  </div>
+                  <div class="act-item">
+                    <div class="act-dot" style="background:rgba(245,158,11,.15);">📙</div>
+                    <div><div class="act-t">The Hobbit</div><div class="act-s">Easy · 100%</div></div>
+                    <div class="act-p">+60 pts</div>
+                  </div>
+                </div>
               </div>
-              <div class="activity-item">
-                <div class="activity-dot" style="background:rgba(99,102,241,.15);">📘</div>
-                <div>
-                  <div class="activity-title">Dune</div>
-                  <div class="activity-sub">Medium · 78% — Yesterday</div>
-                </div>
-                <div class="activity-pts">+96 pts</div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot" style="background:rgba(245,158,11,.15);">📙</div>
-                <div>
-                  <div class="activity-title">The Hobbit</div>
-                  <div class="activity-sub">Easy · 100% — 2d ago</div>
-                </div>
-                <div class="activity-pts">+60 pts</div>
+              <div class="tab-bar">
+                <div class="tb-item on"><span>🏠</span><span>Home</span></div>
+                <div class="tb-item"><span>🔍</span><span>Search</span></div>
+                <div class="tb-item"><span>👤</span><span>Profile</span></div>
               </div>
             </div>
           </div>
+          <div class="screen-label">Home</div>
         </div>
-        <div class="tab-bar">
-          <div class="tab-item active"><span class="tab-icon">🏠</span><span>Home</span></div>
-          <div class="tab-item"><span class="tab-icon">🔍</span><span>Search</span></div>
-          <div class="tab-item"><span class="tab-icon">👤</span><span>Profile</span></div>
+
+        <!-- Search -->
+        <div class="screen-card">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="status-bar"><span>9:41</span><span>🔋</span></div>
+              <div class="screen-body">
+                <div style="font-size:13px;font-weight:800;">Find a Book</div>
+                <div class="search-bar"><span>🔍</span><span class="search-ph">Search by title or author…</span></div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                  <div class="book-row">
+                    <div class="book-cov" style="background:#1e3a5f;">📘</div>
+                    <div><div class="book-t">Dune</div><div class="book-a">Frank Herbert</div><div class="book-pg">688 pages</div></div>
+                    <div class="chev">›</div>
+                  </div>
+                  <div class="book-row">
+                    <div class="book-cov" style="background:#2d1a4a;">🟣</div>
+                    <div><div class="book-t">Name of the Wind</div><div class="book-a">Patrick Rothfuss</div><div class="book-pg">662 pages</div></div>
+                    <div class="chev">›</div>
+                  </div>
+                  <div class="book-row">
+                    <div class="book-cov" style="background:#1a3a2a;">📗</div>
+                    <div><div class="book-t">Project Hail Mary</div><div class="book-a">Andy Weir</div><div class="book-pg">476 pages</div></div>
+                    <div class="chev">›</div>
+                  </div>
+                  <div class="book-row">
+                    <div class="book-cov" style="background:#3a1a1a;">📕</div>
+                    <div><div class="book-t">1984</div><div class="book-a">George Orwell</div><div class="book-pg">328 pages</div></div>
+                    <div class="chev">›</div>
+                  </div>
+                  <div class="book-row" style="opacity:.55;">
+                    <div class="book-cov" style="background:#2a2a1a;">📙</div>
+                    <div><div class="book-t">The Hobbit</div><div class="book-a">J.R.R. Tolkien</div><div class="book-pg">310 pages</div></div>
+                    <div class="chev">›</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-bar">
+                <div class="tb-item"><span>🏠</span><span>Home</span></div>
+                <div class="tb-item on"><span>🔍</span><span>Search</span></div>
+                <div class="tb-item"><span>👤</span><span>Profile</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="screen-label">Search</div>
         </div>
+
+        <!-- Quiz -->
+        <div class="screen-card">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="status-bar"><span>9:41</span><span>🔋</span></div>
+              <div class="screen-body">
+                <div class="quiz-hdr">
+                  <div class="quiz-cov" style="background:#1e3a5f;">📘</div>
+                  <div>
+                    <div class="quiz-t">Dune Quiz</div>
+                    <div class="quiz-m">Frank Herbert</div>
+                    <div class="diff-pill">MEDIUM</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="prog-row" style="margin-bottom:3px;">
+                    <span class="prog-txt">Question 3 of 10</span>
+                    <span class="prog-txt" style="color:var(--primary);">30%</span>
+                  </div>
+                  <div class="prog-wrap"><div class="prog-fill" style="width:30%;"></div></div>
+                </div>
+                <div class="q-text">What is the name of the spice central to Arrakis's economy?</div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                  <div class="opt ok"><div class="opt-l">A</div><div class="opt-txt">Melange</div></div>
+                  <div class="opt bad"><div class="opt-l">B</div><div class="opt-txt">Spicebrew</div></div>
+                  <div class="opt"><div class="opt-l">C</div><div class="opt-txt">Mélèze</div></div>
+                  <div class="opt"><div class="opt-l">D</div><div class="opt-txt">Sandroot</div></div>
+                </div>
+                <div class="exp-box">
+                  <div class="exp-hdr">✓ Correct!</div>
+                  <div class="exp-txt">Melange extends life and enables space navigation.</div>
+                </div>
+              </div>
+              <div class="tab-bar">
+                <div class="tb-item"><span>🏠</span><span>Home</span></div>
+                <div class="tb-item on"><span>📝</span><span>Quiz</span></div>
+                <div class="tb-item"><span>👤</span><span>Profile</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="screen-label">Quiz</div>
+        </div>
+
+        <!-- Profile -->
+        <div class="screen-card">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="status-bar"><span>9:41</span><span>🔋</span></div>
+              <div class="screen-body">
+                <div class="prof-head">
+                  <div class="avatar">📖</div>
+                  <div class="prof-name">Alex Morgan</div>
+                  <div class="prof-user">@alexreads</div>
+                  <div class="rank-pill">👑 Literati II</div>
+                </div>
+                <div class="pstats">
+                  <div class="ps"><div class="v" style="color:#6366F1;">2,840</div><div class="k">Total Points</div></div>
+                  <div class="ps"><div class="v" style="color:#FFD700;">14</div><div class="k">Level</div></div>
+                  <div class="ps"><div class="v">🔥 7</div><div class="k">Streak</div></div>
+                  <div class="ps"><div class="v">23</div><div class="k">Best Streak</div></div>
+                  <div class="ps"><div class="v" style="color:#FFD700;">#248</div><div class="k">Rank</div></div>
+                  <div class="ps"><div class="v" style="color:#C0C0C0;">#201</div><div class="k">Peak Rank</div></div>
+                </div>
+              </div>
+              <div class="tab-bar">
+                <div class="tb-item"><span>🏠</span><span>Home</span></div>
+                <div class="tb-item"><span>🔍</span><span>Search</span></div>
+                <div class="tb-item on"><span>👤</span><span>Profile</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="screen-label">Profile</div>
+        </div>
+
+      </div><!-- /screens-scroll -->
+    </div>
+
+    <!-- ══ PANEL 2: RANKS ══ -->
+    <div class="panel" id="p2">
+      <div class="panel-heading">Seven ranks. One throne.</div>
+      <p class="panel-sub">Earn Elo points by acing quizzes. Each tier has 4 subdivisions (I–IV). Inactivity decays your rank after 14 days.</p>
+      <div class="ranks-list">
+
+        <div class="rank-row">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#9A9A9A;border-radius:4px 0 0 4px;"></div>
+          <div class="rank-orb" style="border-color:#9A9A9A;background:rgba(154,154,154,.1);">📄</div>
+          <div class="rank-info">
+            <div class="rank-name" style="color:#C8C8C8;">Page Turner</div>
+            <div class="rank-range">0 – 400 pts · Subdivisions I–IV</div>
+            <div class="rank-sub">Starting tier for new readers</div>
+          </div>
+          <div class="rank-badge-sm" style="border-color:#9A9A9A;color:#9A9A9A;">I–IV</div>
+        </div>
+
+        <div class="rank-row">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#CD7F32;border-radius:4px 0 0 4px;"></div>
+          <div class="rank-orb" style="border-color:#CD7F32;background:rgba(205,127,50,.1);">🟤</div>
+          <div class="rank-info">
+            <div class="rank-name" style="color:#E8A050;">Challenger</div>
+            <div class="rank-range">400 – 800 pts · Subdivisions I–IV</div>
+            <div class="rank-sub">You've proven you can pass a quiz</div>
+          </div>
+          <div class="rank-badge-sm" style="border-color:#CD7F32;color:#CD7F32;">I–IV</div>
+        </div>
+
+        <div class="rank-row">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#C0C0C0;border-radius:4px 0 0 4px;"></div>
+          <div class="rank-orb" style="border-color:#C0C0C0;background:rgba(192,192,192,.1);">⚪</div>
+          <div class="rank-info">
+            <div class="rank-name" style="color:#E8E8E8;">Bookworm</div>
+            <div class="rank-range">800 – 1,200 pts · Subdivisions I–IV</div>
+            <div class="rank-sub">Consistent, dedicated reader</div>
+          </div>
+          <div class="rank-badge-sm" style="border-color:#C0C0C0;color:#C0C0C0;">I–IV</div>
+        </div>
+
+        <div class="rank-row">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#7C3AED;border-radius:4px 0 0 4px;"></div>
+          <div class="rank-orb" style="border-color:#7C3AED;background:rgba(124,58,237,.1);">🟣</div>
+          <div class="rank-info">
+            <div class="rank-name" style="color:#A78BFA;">Scholar</div>
+            <div class="rank-range">1,200 – 1,600 pts · Subdivisions I–IV</div>
+            <div class="rank-sub">Strong comprehension across genres</div>
+          </div>
+          <div class="rank-badge-sm" style="border-color:#7C3AED;color:#A78BFA;">I–IV</div>
+        </div>
+
+        <div class="rank-row">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#FFD700;border-radius:4px 0 0 4px;"></div>
+          <div class="rank-orb" style="border-color:#FFD700;background:rgba(255,215,0,.08);">🟡</div>
+          <div class="rank-info">
+            <div class="rank-name" style="color:#FFD700;">Literati</div>
+            <div class="rank-range">1,600 – 2,000 pts · Subdivisions I–IV</div>
+            <div class="rank-sub">Elite literary knowledge</div>
+          </div>
+          <div class="rank-badge-sm" style="border-color:#FFD700;color:#FFD700;">I–IV</div>
+        </div>
+
+        <div class="rank-row">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#DC143C;border-radius:4px 0 0 4px;"></div>
+          <div class="rank-orb" style="border-color:#DC143C;background:rgba(220,20,60,.1);">🔴</div>
+          <div class="rank-info">
+            <div class="rank-name" style="color:#FF6B6B;">Sage</div>
+            <div class="rank-range">2,000 – 2,400 pts · Subdivisions I–IV</div>
+            <div class="rank-sub">Near-mastery of written knowledge</div>
+          </div>
+          <div class="rank-badge-sm" style="border-color:#DC143C;color:#FF6B6B;">I–IV</div>
+        </div>
+
+        <div class="rank-row" style="background:linear-gradient(135deg,#1A1A3E,#1a0f35);">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#4169E1,#9B59B6,#50C878,#DC143C);border-radius:4px 0 0 4px;"></div>
+          <div class="rank-orb" style="border-color:#FFD700;background:rgba(255,215,0,.1);">👑</div>
+          <div class="rank-info">
+            <div class="rank-name" style="color:#FFD700;">Grand Sage</div>
+            <div class="rank-range">2,400+ pts · Subdivisions I–IV</div>
+            <div class="rank-sub">The pinnacle. Exclusive theme unlocked at IV.</div>
+          </div>
+          <div class="rank-badge-sm" style="border-color:#FFD700;color:#FFD700;">I–IV</div>
+        </div>
+
       </div>
     </div>
-    <div class="screen-label">Home Dashboard</div>
-  </div>
 
-  <!-- Right phone: Quiz -->
-  <div class="phone side">
-    <div class="phone-frame">
-      <div class="phone-screen">
-        <div class="status-bar">
-          <span>9:41</span>
-          <div class="status-icons">
-            <span>●●●</span>
-            <span>WiFi</span>
-            <span>🔋</span>
+    <!-- ══ PANEL 3: HOW IT WORKS ══ -->
+    <div class="panel" id="p3">
+      <div class="panel-heading">How It Works</div>
+      <p class="panel-sub">From picking a book to climbing the ranks — four simple steps.</p>
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Search for a book</div>
+            <div class="step-desc">Type any title or author. PagePoints searches Google Books and pulls the cover, author, page count, and reading level automatically.</div>
+            <div class="step-detail">
+              <span class="tag">🌍 Google Books API</span>
+              <span class="tag">Millions of titles</span>
+            </div>
           </div>
         </div>
-        <div class="screen-body">
-          <div class="quiz-book-header">
-            <div class="quiz-cover" style="background:#1e3a5f;">📘</div>
-            <div>
-              <div class="quiz-title">Dune Quiz</div>
-              <div class="quiz-meta">Frank Herbert</div>
-              <div class="diff-badge">MEDIUM</div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Choose a difficulty &amp; start the quiz</div>
+            <div class="step-desc">Pick Easy, Medium, or Hard. Claude AI generates 10 unique questions about that specific book — plot, characters, themes, and facts.</div>
+            <div class="step-detail">
+              <span class="tag">🤖 Claude AI</span>
+              <span class="tag">Easy / Medium / Hard</span>
+              <span class="tag">10 questions</span>
             </div>
-          </div>
-          <div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-              <div class="q-num">Question 3 of 10</div>
-              <div class="q-num" style="color:var(--primary);">30%</div>
-            </div>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar-fill" style="width:30%;"></div>
-            </div>
-          </div>
-          <div class="q-text">
-            What is the name of the spice that is central to the economy of Arrakis?
-          </div>
-          <div style="display:flex;flex-direction:column;gap:5px;">
-            <div class="option correct">
-              <div class="opt-letter">A</div>
-              <div class="opt-text">Melange</div>
-            </div>
-            <div class="option wrong">
-              <div class="opt-letter">B</div>
-              <div class="opt-text">Spicebrew</div>
-            </div>
-            <div class="option">
-              <div class="opt-letter">C</div>
-              <div class="opt-text">Mélèze</div>
-            </div>
-            <div class="option">
-              <div class="opt-letter">D</div>
-              <div class="opt-text">Sandroot</div>
-            </div>
-          </div>
-          <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:7px 9px;">
-            <div style="font-size:8px;color:var(--success);font-weight:700;margin-bottom:2px;">✓ Correct!</div>
-            <div style="font-size:7.5px;color:var(--muted);">Melange — the "spice of spices" — enables space navigation and extends human life.</div>
           </div>
         </div>
-        <div class="tab-bar">
-          <div class="tab-item"><span class="tab-icon">🏠</span><span>Home</span></div>
-          <div class="tab-item active"><span class="tab-icon">📝</span><span>Quiz</span></div>
-          <div class="tab-item"><span class="tab-icon">👤</span><span>Profile</span></div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Answer &amp; earn points</div>
+            <div class="step-desc">Each correct answer earns points multiplied by difficulty and accuracy. Finish with a high score to maximize your Elo gain.</div>
+            <div class="step-detail">
+              <span class="tag">Difficulty multiplier</span>
+              <span class="tag">Accuracy bonus</span>
+              <span class="tag">Streak multiplier</span>
+            </div>
+          </div>
         </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Climb the leaderboard</div>
+            <div class="step-desc">Your Elo updates after every quiz. Advance through 4 subdivisions per tier — from Page Turner all the way to Grand Sage. Stay active or your rank decays.</div>
+            <div class="step-detail">
+              <span class="tag">⚔️ Elo K-factor 32</span>
+              <span class="tag">7 tiers · 4 subdivisions</span>
+              <span class="tag">14-day decay warning</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-    <div class="screen-label">Live Quiz</div>
-  </div>
 
-</div>
+  </div><!-- /panels -->
+</div><!-- /shell -->
 
-<div class="divider"></div>
+<script>
+  const pills  = document.querySelectorAll('.pill');
+  const panels = document.querySelectorAll('.panel');
 
-<!-- ── RANKS ──────────────────────────────────────────────────────────────── -->
-<section class="section">
-  <div class="section-label">Competitive Ladder</div>
-  <h2>Seven ranks.<br>One throne.</h2>
-  <p class="section-sub">
-    Earn Elo points by acing quizzes and climb through four subdivisions in
-    each tier — all the way to Grand Sage.
-  </p>
-
-  <div class="ranks-grid">
-
-    <div class="rank-card" style="--c:#9A9A9A;">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#9A9A9A;border-radius:16px 16px 0 0;"></div>
-      <div class="rank-orb" style="border-color:#9A9A9A;background:rgba(154,154,154,.1);">📄</div>
-      <div class="rank-name" style="color:#C8C8C8;">Page Turner</div>
-      <div class="rank-range">0 – 400 pts</div>
-    </div>
-
-    <div class="rank-card">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#CD7F32;border-radius:16px 16px 0 0;"></div>
-      <div class="rank-orb" style="border-color:#CD7F32;background:rgba(205,127,50,.1);">🟤</div>
-      <div class="rank-name" style="color:#E8A050;">Challenger</div>
-      <div class="rank-range">400 – 800 pts</div>
-    </div>
-
-    <div class="rank-card">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#C0C0C0;border-radius:16px 16px 0 0;"></div>
-      <div class="rank-orb" style="border-color:#C0C0C0;background:rgba(192,192,192,.1);">⚪</div>
-      <div class="rank-name" style="color:#E8E8E8;">Bookworm</div>
-      <div class="rank-range">800 – 1 200 pts</div>
-    </div>
-
-    <div class="rank-card">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#7C3AED;border-radius:16px 16px 0 0;"></div>
-      <div class="rank-orb" style="border-color:#7C3AED;background:rgba(124,58,237,.1);">🟣</div>
-      <div class="rank-name" style="color:#A78BFA;">Scholar</div>
-      <div class="rank-range">1 200 – 1 600 pts</div>
-    </div>
-
-    <div class="rank-card">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#FFD700;border-radius:16px 16px 0 0;"></div>
-      <div class="rank-orb" style="border-color:#FFD700;background:rgba(255,215,0,.08);">🟡</div>
-      <div class="rank-name" style="color:#FFD700;">Literati</div>
-      <div class="rank-range">1 600 – 2 000 pts</div>
-    </div>
-
-    <div class="rank-card">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#DC143C;border-radius:16px 16px 0 0;"></div>
-      <div class="rank-orb" style="border-color:#DC143C;background:rgba(220,20,60,.1);">🔴</div>
-      <div class="rank-name" style="color:#FF6B6B;">Sage</div>
-      <div class="rank-range">2 000 – 2 400 pts</div>
-    </div>
-
-    <div class="rank-card" style="background:linear-gradient(135deg, #1A1A3E, #1e1040);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4169E1,#9B59B6,#50C878,#DC143C);border-radius:16px 16px 0 0;"></div>
-      <div class="rank-orb" style="border-color:#FFD700;background:rgba(255,215,0,.1);">👑</div>
-      <div class="rank-name" style="color:#FFD700;">Grand Sage</div>
-      <div class="rank-range">2 400+ pts</div>
-    </div>
-
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── FEATURES ───────────────────────────────────────────────────────────── -->
-<section class="section">
-  <div class="section-label">Everything You Need</div>
-  <h2>Built for<br>serious readers</h2>
-  <p class="section-sub">
-    Every feature is designed to reward knowledge and make reading feel as
-    competitive and rewarding as your favorite game.
-  </p>
-
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">🤖</div>
-      <h3>AI-Generated Quizzes</h3>
-      <p>Claude AI creates unique, accurate questions for any book in our library. Easy, Medium, and Hard difficulty levels.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚔️</div>
-      <h3>Elo Ranking System</h3>
-      <p>A true competitive ladder — each quiz shifts your Elo points, with inactivity decay to keep the rankings fresh.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔥</div>
-      <h3>Streak Rewards</h3>
-      <p>Build daily reading streaks and earn bonus multipliers. Miss a day and lose the streak — stay consistent.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🌍</div>
-      <h3>Google Books Integration</h3>
-      <p>Search millions of titles instantly. PagePoints pulls cover art, metadata, and reading level from Google Books.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎨</div>
-      <h3>Rank Themes</h3>
-      <p>Unlock Fantasy, Sci-Fi, and Romance themes. Reach Grand Sage IV to unlock the exclusive Grand Sage theme.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <h3>Detailed Stats</h3>
-      <p>Track points earned, accuracy, level progression, current rank, peak rank, and lifetime reading history.</p>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── TECH STACK ─────────────────────────────────────────────────────────── -->
-<section class="section">
-  <div class="section-label">Tech Stack</div>
-  <h2>Built with<br>modern tools</h2>
-  <p class="section-sub" style="margin-bottom:32px;">
-    Cross-platform from day one — iOS, Android, and web — with a serverless backend.
-  </p>
-
-  <div class="tech-grid">
-    <span class="tech-pill"><span class="tech-dot" style="background:#61DAFB;"></span>React Native</span>
-    <span class="tech-pill"><span class="tech-dot" style="background:#000020;border:1px solid #555;"></span>Expo</span>
-    <span class="tech-pill"><span class="tech-dot" style="background:#3178C6;"></span>TypeScript</span>
-    <span class="tech-pill"><span class="tech-dot" style="background:#3ECF8E;"></span>Supabase</span>
-    <span class="tech-pill"><span class="tech-dot" style="background:#CC785C;"></span>Claude AI</span>
-    <span class="tech-pill"><span class="tech-dot" style="background:#4285F4;"></span>Google Books API</span>
-    <span class="tech-pill"><span class="tech-dot" style="background:#764ABC;"></span>Zustand</span>
-    <span class="tech-pill"><span class="tech-dot" style="background:#336791;"></span>PostgreSQL</span>
-  </div>
-</section>
-
-<footer>
-  <p>PagePoints · Reading, gamified · Built with ❤️ and TypeScript</p>
-</footer>
-
+  function show(i) {
+    pills.forEach((p, j)  => p.classList.toggle('active', i === j));
+    panels.forEach((p, j) => p.classList.toggle('active', i === j));
+  }
+</script>
 </body>
 </html>
